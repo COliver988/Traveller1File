@@ -158,17 +158,11 @@ StringBuilder parseUWP(string uwp)
 }
 
 // main loop to read input and output translation
+Console.WriteLine("Please enter a UWP string (or press Enter to exit):");
 while (Console.ReadLine() is string line && line.Length > 0)
 {
-        Console.WriteLine("Please enter a UWP string (or press Enter to exit):");
-        if (!Regex.IsMatch(line, pattern))
-        {
-            Console.WriteLine("Invalid UWP string. Please enter a valid UWP string.");
-            continue;
-        }
-        else
-        {
-            var result = parseUWP(line);
-            Console.WriteLine(result.ToString());
-        }
+    if (!Regex.IsMatch(line, pattern))
+        Console.WriteLine("Invalid UWP string. Please enter a valid UWP string.");
+    else
+        Console.WriteLine(parseUWP(line).ToString());
 }
