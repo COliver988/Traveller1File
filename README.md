@@ -9,8 +9,8 @@ This will run on Macs, Linux and PCs. You will to install .NET if not already th
 ### Usage
 There should be an option to copy the files to your local machine. Download them somewhere. Then simply:
 
-**dotnet *file* **
+**dotnet file**
 
 To run the UWP translater:
 
-**donbtet UWPTranslate**
+**dotnet UWPTranslate**
