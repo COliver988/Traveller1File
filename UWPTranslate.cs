@@ -141,7 +141,7 @@ Dictionary<char, string> TechLevel = new Dictionary<char, string>
     {'G', "Occassional non-Imperial"},
 };
 
-var pattern = @"^[ABCDEX][0-9RS][0-9A-F][0-9A-F][0-9A-F][0-9A-F][0-9A-F]-[0-9A-F]$";
+var pattern = @"^[ABCDEXFGHY][0-9RSA][0-9A-F][0-9A-F][0-9A-F][0-9A-F][0-9A-F]-[0-9A-F]$";
 
 StringBuilder parseUWP(string uwp)
 {
