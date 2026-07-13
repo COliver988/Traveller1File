@@ -141,7 +141,51 @@ Dictionary<char, string> TechLevel = new Dictionary<char, string>
     {'G', "Occassional non-Imperial"},
 };
 
+const string validStarportCodes = "ABCDEXFGHY";
+const string validSizeCodes = "0123456789RSA";
+const string validAtmosphereCodes = "0123456789ABCDEF";
+const string validHydrographicsCodes = "0123456789A";
+const string validPopulationCodes = "0123456789A";
+const string validGovernmentCodes = "0123456789ABCDEF";
+const string validLawLevelCodes = "0123456789A";
+const string validTechLevelCodes = "0123456789ABCDEFG";
+
 var pattern = @"^[ABCDEXFGHY][0-9RSA][0-9A-F][0-9A-F][0-9A-F][0-9A-F][0-9A]-[0-9A-G]$";
+
+string? GetUwpValidationError(string uwp)
+{
+    if (uwp.Length != 9)
+        return $"Invalid length: expected 9 characters, got {uwp.Length}.";
+
+    if (uwp[7] != '-')
+        return $"Invalid format: expected '-' at position 8, found '{uwp[7]}' in position 8.";
+
+    if (!Starport.ContainsKey(uwp[0]))
+        return $"Invalid starport code '{uwp[0]}' at position 1; expected one of {validStarportCodes}.";
+
+    if (!Size.ContainsKey(uwp[1]))
+        return $"Invalid size code '{uwp[1]}' at position 2; expected one of {validSizeCodes}.";
+
+    if (!Atmosphere.ContainsKey(uwp[2]))
+        return $"Invalid atmosphere code '{uwp[2]}' at position 3; expected one of {validAtmosphereCodes}.";
+
+    if (!Hydrographics.ContainsKey(uwp[3]))
+        return $"Invalid hydrographics code '{uwp[3]}' at position 4; expected one of {validHydrographicsCodes}.";
+
+    if (!Population.ContainsKey(uwp[4]))
+        return $"Invalid population code '{uwp[4]}' at position 5; expected one of {validPopulationCodes}.";
+
+    if (!Government.ContainsKey(uwp[5]))
+        return $"Invalid government code '{uwp[5]}' at position 6; expected one of {validGovernmentCodes}.";
+
+    if (!LawLevel.ContainsKey(uwp[6]))
+        return $"Invalid law level code '{uwp[6]}' at position 7; expected one of {validLawLevelCodes}.";
+
+    if (!Regex.IsMatch(uwp.Substring(8, 1), "^[0-9A-G]$"))
+        return $"Invalid tech level code '{uwp[8]}' at position 9; expected one of {validTechLevelCodes}.";
+
+    return null;
+}
 
 StringBuilder parseUWP(string uwp)
 {
@@ -161,8 +205,9 @@ StringBuilder parseUWP(string uwp)
 Console.WriteLine("Please enter a UWP string (or press Enter to exit):");
 while (Console.ReadLine() is string line && line.Length > 0)
 {
-    if (!Regex.IsMatch(line, pattern))
-        Console.WriteLine("Invalid UWP string. Please enter a valid UWP string.");
+    var error = GetUwpValidationError(line);
+    if (error is not null)
+        Console.WriteLine($"Invalid UWP string: {error}");
     else
         Console.WriteLine(parseUWP(line).ToString());
 }
