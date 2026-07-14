@@ -189,14 +189,18 @@ string? GetUwpValidationError(string uwp)
     return null;
 }
 
-StringBuilder ParseUWP(string uwp)
+StringBuilder ParseUWP(string uwp, string pbg)
 {
     var sb = new StringBuilder();
     sb.AppendLine($"Starport: {Starport[uwp[0]]}");
     sb.AppendLine($"Size: {Size[uwp[1]]}");
     sb.AppendLine($"Atmosphere: {Atmosphere[uwp[2]]}");
     sb.AppendLine($"Hydrographics: {Hydrographics[uwp[3]]}");
-    sb.AppendLine($"Population: {Population[uwp[4]]}");
+    int.TryParse(uwp[4].ToString(), out int populationValue);
+    int.TryParse(pbg.Length > 0 ? pbg[0].ToString() : "0", out int pbgValue);
+    var population = Math.Pow(10, populationValue) * pbgValue;
+    sb.AppendLine($"Population: {population}");
+    //sb.AppendLine($"Population: {Population[uwp[4]]}");
     sb.AppendLine($"Government: {Government[uwp[5]]}");
     sb.AppendLine($"Law Level: {LawLevel[uwp[6]]}");
     sb.AppendLine($"Tech Level: {TechLevel[uwp[8]]}");
@@ -217,6 +221,7 @@ string ParseSecLine(string line)
     var tradeCodes = line.Substring(32, 16).Trim();
     var zone = line.Substring(48, 1).Trim();
     var pbg = line.Substring(51, 3).Trim();
+    string pbgExt = extendPBG(pbg);
     var allegiance = line.Substring(55, 2).Trim();
     var stellarData = line.Substring(58, 16).Trim();
 
@@ -227,7 +232,7 @@ string ParseSecLine(string line)
     sb.AppendLine($"Bases: {bases}");
     sb.AppendLine($"Trade/Comments: {tradeCodes}");
     sb.AppendLine($"Zone: {zone}");
-    sb.AppendLine($"PBG: {pbg}");
+    sb.AppendLine($"PBG: {pbgExt}");
     sb.AppendLine($"Allegiance: {allegiance}");
     sb.AppendLine($"Stellar Data: {stellarData}");
 
@@ -239,10 +244,19 @@ string ParseSecLine(string line)
     else
     {
         sb.AppendLine("UWP translation:");
-        sb.Append(ParseUWP(uwp));
+        sb.Append(ParseUWP(uwp, pbg));
     }
 
     return sb.ToString();
+}
+
+string extendPBG(string pbg)
+{
+    if (string.IsNullOrWhiteSpace(pbg))
+        return "000";
+    var belts = pbg.Length > 0 ? pbg[1] : '0';
+    var GG = pbg.Length > 0 ? pbg[2] : '0';
+    return $"Belts: {belts} Gas Giants: {GG}";
 }
 
 Console.WriteLine("Enter Traveller SEC lines (blank line to exit):");
