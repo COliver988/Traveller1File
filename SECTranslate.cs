@@ -254,8 +254,8 @@ string extendPBG(string pbg)
 {
     if (string.IsNullOrWhiteSpace(pbg))
         return "000";
-    var belts = pbg.Length > 0 ? pbg[1] : '0';
-    var GG = pbg.Length > 0 ? pbg[2] : '0';
+    var belts = pbg.Length == 3 ? pbg[1] : '0';
+    var GG = pbg.Length == 3 ? pbg[2] : '0';
     return $"Belts: {belts} Gas Giants: {GG}";
 }
 
