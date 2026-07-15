@@ -14,3 +14,7 @@ There should be an option to copy the files to your local machine. Download them
 To run the UWP translater:
 
 **dotnet UWPTranslate**
+
+## Files
+* *UWPTranslate* Will translate a single UWP
+* *SECTranslate* Will translate a fixed-width SEC line
